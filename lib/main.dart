@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 final items = ['Meter', 'Kilometer','Feet','Mile'];
+TextEditingController txt = TextEditingController();
+TextEditingController validateInput = TextEditingController();
+String? valueTo;
+String? valueFrom;
+
 //list of items for DropdownFields
 
 void main() {
@@ -75,6 +80,7 @@ class InputValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: validateInput,
       decoration: const InputDecoration(
         border:UnderlineInputBorder(),
         hintText: 'Bitten geben Sie den zu konvertierenden Wert ein',
@@ -94,14 +100,12 @@ class DropDownButtonFrom extends StatefulWidget {
 }
 
 class _DropDownButtonFromState extends State<DropDownButtonFrom> {
-  String? value;
-
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: value,
+      value: valueFrom,
       isExpanded: true,
-      onChanged: (value) => setState(() => this.value = value) ,
+      onChanged: (value) => setState(() => valueFrom = value) ,
       items: items.map(buildMenuItem).toList(),
     );
   }
@@ -122,14 +126,12 @@ class DropDownButtonTo extends StatefulWidget {
 }
 
 class _DropDownButtonToState extends State<DropDownButtonTo> {
-  String? value;
-
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: value,
+      value: valueTo,
       isExpanded: true,
-      onChanged: (value) => setState(() => this.value = value) ,
+      onChanged: (value) => setState(() => valueTo = value) ,
       items: items.map(buildMenuItem).toList(),
     );
   }
@@ -161,7 +163,17 @@ class _ButtonState extends State<Button> {
         foregroundColor: Colors.blueAccent,
       ),
       child: const Text('Konvertieren'),
-      onPressed: () => print('test'),
+      onPressed: () {
+        if(validateInput.text.isEmpty){
+          txt.text = 'Bitte Wert eingeben';
+        }
+        if(!RegExp('[0-9]').hasMatch(validateInput.text)){
+          txt.text = 'Nur Zahlen sind erlaubt';
+        }
+        if(valueTo!.isEmpty){
+          txt.text = "Bitte Ziel-Format eingeben";
+        }
+      },
     );
   }
 }
@@ -172,7 +184,9 @@ class OutputValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: txt,
       enabled: false,
+      textAlign: TextAlign.center,
       decoration: const InputDecoration(
         border:InputBorder.none,
         hintText: 'hier kommt der output',
