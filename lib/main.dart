@@ -167,11 +167,14 @@ class _ButtonState extends State<Button> {
         if(validateInput.text.isEmpty){
           txt.text = 'Bitte Wert eingeben';
         }
-        if(!RegExp('[0-9]').hasMatch(validateInput.text)){
+        if(!RegExp('[0-9]').hasMatch(validateInput.text) && validateInput.text.isNotEmpty){
           txt.text = 'Nur Zahlen sind erlaubt';
         }
-        if(valueTo!.isEmpty){
+        if(valueTo == null){
           txt.text = "Bitte Ziel-Format eingeben";
+        }
+        if(valueFrom == null){
+          txt.text = "Bitte Ausgangsformat-Format eingeben";
         }
       },
     );
@@ -189,7 +192,6 @@ class OutputValue extends StatelessWidget {
       textAlign: TextAlign.center,
       decoration: const InputDecoration(
         border:InputBorder.none,
-        hintText: 'hier kommt der output',
         labelStyle: TextStyle(
           fontSize: 30,
         ),
